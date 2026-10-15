@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Douglas Honório | Desenvolvedor</title>
+    <title>Douglas Honório | Desenvolvedor Backend & Cibersegurança</title>
     <style>
         * {
             margin: 0;
@@ -14,250 +14,204 @@
 
         body {
             background-color: #0b0f19;
-            color: #e2e8f0;
-            min-height: 100vh;
+            color: #f3f4f6;
             display: flex;
             justify-content: center;
             align-items: center;
-            position: relative;
-            overflow-x: hidden;
-            padding: 20px 0;
+            min-height: 100vh;
+            padding: 20px;
+            /* Mantendo a sua essência visual tech de fundo */
+            background-image: linear-gradient(rgba(11, 15, 25, 0.85), rgba(11, 15, 25, 0.85)), 
+                              repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(59, 130, 246, 0.03) 40px, rgba(59, 130, 246, 0.03) 41px);
         }
 
-        /* Efeito Matrix Canvas de Fundo */
-        #matrix-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            opacity: 0.25;
-            pointer-events: none;
-        }
-
-        /* Container Principal do Card */
         .container {
-            position: relative;
-            z-index: 2;
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            padding: 40px;
             width: 100%;
-            max-width: 600px;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+            max-width: 650px;
+            background: rgba(17, 24, 39, 0.75);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
         h1 {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 700;
             color: #ffffff;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
         }
 
         .subtitle {
-            color: #38bdf8;
             font-size: 0.95rem;
             font-weight: 600;
-            letter-spacing: 1px;
+            color: #3b82f6;
             text-transform: uppercase;
-            margin-bottom: 20px;
+            letter-spacing: 1.5px;
+            margin-bottom: 15px;
         }
 
-        .description {
+        .bio {
+            font-size: 1rem;
             color: #94a3b8;
-            font-size: 0.95rem;
             line-height: 1.6;
             margin-bottom: 25px;
         }
 
         /* Tags de Tecnologias */
-        .tech-tags {
+        .tech-stack {
             display: flex;
             flex-wrap: wrap;
+            justify-content: center;
             gap: 8px;
             margin-bottom: 35px;
         }
 
-        .tag {
-            background: rgba(30, 41, 59, 0.8);
+        .tech-tag {
+            background: rgba(30, 41, 59, 0.9);
+            border: 1px solid rgba(148, 163, 184, 0.15);
             color: #cbd5e1;
             padding: 6px 14px;
             border-radius: 20px;
             font-size: 0.85rem;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            font-weight: 500;
+            transition: all 0.25s ease;
+        }
+
+        .tech-tag:hover {
+            color: #ffffff;
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.15);
+            transform: translateY(-2px);
         }
 
         /* Seção de Projetos */
         .section-title {
-            font-size: 0.85rem;
-            letter-spacing: 1.5px;
+            font-size: 0.9rem;
+            font-weight: 600;
             color: #64748b;
-            margin-bottom: 15px;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
         }
 
-        .projeto-card {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
+        .project-card {
+            background: rgba(30, 41, 59, 0.4);
+            border: 1px solid rgba(59, 130, 246, 0.15);
+            border-radius: 12px;
             padding: 20px;
             margin-bottom: 15px;
-            transition: transform 0.2s ease, border-color 0.2s ease;
+            transition: all 0.3s ease-in-out;
         }
 
-        .projeto-card:hover {
-            transform: translateY(-2px);
-            border-color: rgba(56, 189, 248, 0.3);
+        .project-card:hover {
+            border-color: rgba(59, 130, 246, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 
+                        0 0 15px rgba(59, 130, 246, 0.12);
+            background: rgba(30, 41, 59, 0.6);
         }
 
-        .projeto-card h3 {
+        .project-title {
             font-size: 1.1rem;
-            color: #38bdf8;
+            font-weight: 600;
+            color: #ffffff;
             margin-bottom: 8px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .projeto-card p {
+        .project-desc {
+            font-size: 0.92rem;
             color: #94a3b8;
-            font-size: 0.9rem;
             line-height: 1.5;
             margin-bottom: 15px;
         }
 
-        .btn-projeto {
+        .btn-link {
             display: inline-block;
-            background: rgba(56, 189, 248, 0.1);
-            color: #38bdf8;
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 0.85rem;
+            font-size: 0.88rem;
             font-weight: 500;
+            color: #60a5fa;
             text-decoration: none;
-            transition: background 0.2s;
-            border: 1px solid rgba(56, 189, 248, 0.2);
+            transition: color 0.2s ease;
         }
 
-        .btn-projeto:hover {
-            background: rgba(56, 189, 248, 0.2);
+        .btn-link:hover {
+            color: #93c5fd;
+            text-decoration: underline;
         }
 
-        /* Botão Principal */
-        .btn-main {
+        /* Botão de Ação Principal */
+        .cta-container {
+            margin-top: 25px;
+        }
+
+        .btn-primary {
             display: block;
             width: 100%;
-            background: #2563eb;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
             color: #ffffff;
             text-align: center;
-            padding: 12px;
-            border-radius: 8px;
-            font-weight: 600;
+            padding: 14px;
+            border-radius: 10px;
             text-decoration: none;
-            margin-top: 25px;
-            transition: background 0.2s;
+            font-weight: 600;
+            font-size: 1rem;
+            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+            transition: all 0.25s ease;
         }
 
-        .btn-main:hover {
-            background: #1d4ed8;
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #1d4ed8, #1e40af);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
         }
     </style>
 </head>
 <body>
 
-    <!-- Canvas para o Efeito Matrix Interativo -->
-    <canvas id="matrix-canvas"></canvas>
-
     <div class="container">
-        <h1>Douglas Honório</h1>
-        <div class="subtitle">Desenvolvedor Python</div>
-        
-        <p class="description">
-            Desenvolvedor focado em Python, banco de dados MySQL e soluções de cibersegurança. Construindo automações e sistemas robustos.
-        </p>
+        <header>
+            <h1>Douglas Honório</h1>
+            <div class="subtitle">Desenvolvedor Backend & Cibersegurança</div>
+            <p class="bio">Desenvolvendo aplicações seguras, automações inteligentes e painéis de monitoramento com Python, Streamlit e Supabase. Focado em proteção de dados e arquitetura de sistemas robustos.</p>
+        </header>
 
-        <div class="tech-tags">
-            <span class="tag">Python</span>
-            <span class="tag">HTML5 & CSS3</span>
-            <span class="tag">MySQL</span>
-            <span class="tag">Supabase</span>
-            <span class="tag">Git & GitHub</span>
+        <div class="tech-stack">
+            <span class="tech-tag">Python</span>
+            <span class="tech-tag">HTML5 & CSS3</span>
+            <span class="tech-tag">MySQL</span>
+            <span class="tech-tag">Supabase</span>
+            <span class="tech-tag">Git & GitHub</span>
         </div>
 
         <div class="section-title">Projetos em Destaque</div>
 
-        <!-- Projeto 1: Painel Ciber Supabase -->
-        <div class="projeto-card">
-            <h3>📁 painel-ciber-supabase</h3>
-            <p>Painel web interativo desenvolvido em Streamlit integrado ao banco de dados Supabase para gestão, registro e monitoramento de segurança contra ameaças.</p>
+        <div class="project-card">
+            <div class="project-title">📁 painel-ciber-supabase</div>
+            <div class="project-desc">Painel web interativo construído em Streamlit com integração ao banco de dados Supabase, focado no monitoramento, registro de logs e gestão de segurança contra ameaças.</div>
+            <a href="https://github.com/dhonorio73/painel-ciber-supabase" target="_blank" class="btn-link">Ver no GitHub &rarr;</a>
         </div>
 
-        <!-- Projeto 2: Meu Primeiro Site (Adicionado) -->
-        <div class="projeto-card">
-            <h3>📁 meu_primeiro_site</h3>
-            <p>Página de portfólio pessoal desenvolvida com HTML5 e CSS3 para apresentação profissional, estruturada com design moderno e responsivo.</p>
-            <a href="https://github.com/0dhonorio73/meu_primeiro_site" target="_blank" class="btn-projeto">Ver no GitHub</a>
+        <div class="project-card">
+            <div class="project-title">📁 meu_primeiro_site</div>
+            <div class="project-desc">Portfólio pessoal desenvolvido com HTML5 e CSS3, estruturado com design moderno, responsivo e estética inspirada em segurança da informação.</div>
+            <a href="https://github.com/dhonorio73/meu_primeiro_site" target="_blank" class="btn-link">Ver no GitHub &rarr;</a>
         </div>
 
-        <a href="https://github.com/0dhonorio73" target="_blank" class="btn-main">Acessar Perfil Completo</a>
+        <div class="cta-container">
+            <a href="https://github.com/dhonorio73" target="_blank" class="btn-primary">Acessar Perfil Completo no GitHub</a>
+        </div>
     </div>
 
-    <script>
-        // Script do Efeito Matrix Interativo (Cascata Vertical nas cores Verde, Amarelo, Vermelho e Branco)
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        // Caracteres estilo código/ciberespaço
-        const characters = '01ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#@$%&*<>{}[]PYTHON_SEC';
-        const fontSize = 16;
-        let columns = Math.floor(canvas.width / fontSize);
-        
-        // Array para controlar a posição Y de cada coluna
-        let drops = [];
-        for (let i = 0; i < columns; i++) {
-            drops[i] = Math.floor(Math.random() * -100);
-        }
-
-        // Paleta de cores solicitada: Verde, Amarelo, Vermelho, Branco
-        const colorPalette = ['#22c55e', '#eab308', '#ef4444', '#ffffff'];
-
-        function drawMatrix() {
-            // Efeito de desbotamento para criar o rastro da cascata
-            ctx.fillStyle = 'rgba(11, 15, 25, 0.12)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.font = fontSize + 'px monospace';
-
-            for (let i = 0; i < drops.length; i++) {
-                // Seleciona um caractere aleatório
-                const text = characters.charAt(Math.floor(Math.random() * characters.length));
-                
-                // Escolhe aleatoriamente uma das cores da paleta para dar o efeito dinâmico
-                ctx.fillStyle = colorPalette[Math.floor(Math.random() * colorPalette.length)];
-                
-                // Desenha o caractere na tela
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                // Reinicia a queda do caractere ao chegar no fim da tela de forma aleatória
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
-
-        // Intervalo de animação (~30fps)
-        setInterval(drawMatrix, 33);
-    </script>
 </body>
 </html>
