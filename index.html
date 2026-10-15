@@ -1,303 +1,131 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Douglas Honório | Desenvolvedor Backend & Cibersegurança</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+import streamlit as st
+import pandas as pd
+import datetime
 
-        body {
-            background-color: #0b0f19;
-            color: #f3f4f6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-            position: relative;
-            overflow-x: hidden;
-        }
+# --- CONFIGURAÇÃO DA PÁGINA ---
+st.set_page_config(
+    page_title="Enterprise Threat Intelligence Dashboard",
+    page_icon="⚡",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
 
-        /* Efeito Matrix / Código em Cascata no Fundo */
-        #matrix-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.18;
-            pointer-events: none;
-        }
+# --- ESTILIZAÇÃO CUSTOMIZADA ---
+st.markdown("""
+<style>
+    .main { background-color: #0f172a; }
+    .metric-card {
+        background-color: #1e293b;
+        border: 1px solid #334155;
+        border-top: 3px solid #3b82f6;
+        padding: 16px;
+        border-radius: 6px;
+    }
+    .metric-title { color: #94a3b8; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+    .metric-value { color: #f8fafc; font-size: 24px; font-weight: 700; margin-top: 4px; }
+    .status-badge { background-color: rgba(34, 197, 94, 0.15); color: #22c55e; padding: 4px 10px; border-radius: 4px; font-weight: 600; font-size: 13px; }
+</style>
+""", unsafe_allow_html=True)
 
-        .container {
-            width: 100%;
-            max-width: 650px;
-            background: rgba(17, 24, 39, 0.85);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(59, 130, 246, 0.25);
-            border-radius: 16px;
-            padding: 35px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
-            z-index: 1;
-        }
+# --- AUTENTICAÇÃO ---
+def verificar_autenticacao():
+    if "autenticado" not in st.session_state:
+        st.session_state.autenticado = False
+    
+    if not st.session_state.autenticado:
+        st.sidebar.markdown("### 🔒 Secure Gateway")
+        senha_input = st.sidebar.text_input("Palavra-passe corporativa:", type="password")
+        if st.sidebar.button("🔓 Autenticar Acesso", use_container_width=True):
+            if senha_input == "ciber2026":
+                st.session_state.autenticado = True
+                st.rerun()
+            else:
+                st.sidebar.error("❌ Credencial inválida.")
+        return False
+    return True
 
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+if not verificar_autenticacao():
+    st.title("⚡ Enterprise Threat Intelligence")
+    st.warning("⚠️ Acesso restrito. Introduza a chave corporativa de autenticação na barra lateral (`ciber2026`).")
+    st.stop()
 
-        h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
-        }
+# --- CARREGAR DADOS DIRETAMENTE NO CÓDIGO ---
+@st.cache_data
+def carregar_dados():
+    dados = [
+        {"id": 1, "nome_operador": "Ana Silva", "registro_funcionario": "101", "data_nascimento": "12/03/1992", "termo_pesquisado": "Análise de vulnerabilidades CVE-2026", "data_hora": "2026-10-01 09:15:22", "departamento": "Segurança da Informação"},
+        {"id": 2, "nome_operador": "Carlos Mendes", "registro_funcionario": "102", "data_nascimento": "22/07/1988", "termo_pesquisado": "Configuração de Firewall corporativo", "data_hora": "2026-10-02 11:30:45", "departamento": "Infraestrutura e Redes"},
+        {"id": 3, "nome_operador": "Beatriz Costa", "registro_funcionario": "103", "data_nascimento": "05/11/1995", "termo_pesquisado": "Auditoria de conformidade LGPD", "data_hora": "2026-10-03 14:10:00", "departamento": "Compliance"},
+        {"id": 4, "nome_operador": "Marcos Oliveira", "registro_funcionario": "104", "data_nascimento": "14/02/1990", "termo_pesquisado": "Python Flask API endpoints security", "data_hora": "2026-10-04 16:20:11", "departamento": "Desenvolvimento / TI"},
+        {"id": 5, "nome_operador": "Ana Silva", "registro_funcionario": "101", "data_nascimento": "12/03/1992", "termo_pesquisado": "Mitigação de ataques DDoS", "data_hora": "2026-10-05 08:45:33", "departamento": "Segurança da Informação"},
+        {"id": 6, "nome_operador": "Juliana Rocha", "registro_funcionario": "105", "data_nascimento": "30/09/1993", "termo_pesquisado": "Gestão de acessos IAM Supabase", "data_hora": "2026-10-06 10:05:50", "departamento": "Governança de Dados"},
+        {"id": 7, "nome_operador": "Carlos Mendes", "registro_funcionario": "102", "data_nascimento": "22/07/1988", "termo_pesquisado": "Análise de logs de intrusão", "data_hora": "2026-10-07 13:22:19", "departamento": "Infraestrutura e Redes"},
+        {"id": 8, "nome_operador": "Lucas Pereira", "registro_funcionario": "106", "data_nascimento": "18/12/1991", "termo_pesquisado": "Relatório de incidentes críticos", "data_hora": "2026-10-08 17:50:02", "departamento": "Centro de Operações (SOC)"},
+        {"id": 9, "nome_operador": "Beatriz Costa", "registro_funcionario": "103", "data_nascimento": "05/11/1995", "termo_pesquisado": "Termos de uso e privacidade", "data_hora": "2026-10-09 09:33:40", "departamento": "Compliance"},
+        {"id": 10, "nome_operador": "Marcos Oliveira", "registro_funcionario": "104", "data_nascimento": "14/02/1990", "termo_pesquisado": "Criptografia Fernet e SHA-256", "data_hora": "2026-10-10 15:12:04", "departamento": "Desenvolvimento / TI"}
+    ]
+    return pd.DataFrame(dados)
 
-        .subtitle {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #3b82f6;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            margin-bottom: 15px;
-        }
+# --- CABEÇALHO ---
+st.markdown("### ⚡ Supabase Observability & Threat Telemetry")
+st.markdown("Painel de controlo corporativo em tempo real integrado ao cluster de produção.")
 
-        .bio {
-            font-size: 1rem;
-            color: #94a3b8;
-            line-height: 1.6;
-            margin-bottom: 25px;
-        }
+df_dados = carregar_dados()
 
-        /* Tags de Tecnologias com Ícones */
-        .tech-stack {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 35px;
-        }
+if not df_dados.empty:
+    # --- FILTROS NA BARRA LATERAL ---
+    st.sidebar.markdown("---")
+    st.sidebar.subheader("⚙️ Filtros de Fleet")
+    
+    operadores = ["Todos"] + list(df_dados["nome_operador"].dropna().unique())
+    op_sel = st.sidebar.selectbox("Filtrar por Operador:", operadores)
+    if op_sel != "Todos":
+        df_dados = df_dados[df_dados["nome_operador"] == op_sel]
 
-        .tech-tag {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: rgba(30, 41, 59, 0.9);
-            border: 1px solid rgba(148, 163, 184, 0.15);
-            color: #cbd5e1;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.25s ease;
-        }
+    deptos = ["Todos"] + list(df_dados["departamento"].dropna().unique())
+    dept_sel = st.sidebar.selectbox("Filtrar por Departamento:", deptos)
+    if dept_sel != "Todos":
+        df_dados = df_dados[df_dados["departamento"] == dept_sel]
 
-        .tech-tag svg {
-            width: 16px;
-            height: 16px;
-            fill: currentColor;
-        }
+    # --- MÉTRICAS ---
+    total_reg = len(df_dados)
+    ops_unicos = df_dados["nome_operador"].nunique()
 
-        .tech-tag:hover {
-            color: #ffffff;
-            border-color: #3b82f6;
-            background: rgba(59, 130, 246, 0.15);
-            transform: translateY(-2px);
-        }
+    c1, c2, c3, c4 = st.columns(4)
+    with c1:
+        st.markdown(f'<div class="metric-card"><div class="metric-title">Total Queries</div><div class="metric-value">{total_reg}</div></div>', unsafe_allow_html=True)
+    with c2:
+        ultima = df_dados["data_hora"].max()
+        st.markdown(f'<div class="metric-card"><div class="metric-title">Último Evento</div><div class="metric-value" style="font-size:16px; margin-top:8px;">{ultima}</div></div>', unsafe_allow_html=True)
+    with c3:
+        st.markdown(f'<div class="metric-card"><div class="metric-title">Active Operators</div><div class="metric-value">{ops_unicos}</div></div>', unsafe_allow_html=True)
+    with c4:
+        st.markdown(f'<div class="metric-card"><div class="metric-title">Database Status</div><div class="metric-value" style="margin-top:6px;"><span class="status-badge">ONLINE 🟢</span></div></div>', unsafe_allow_html=True)
 
-        /* Seção de Projetos */
-        .section-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-        }
+    st.markdown("<br>", unsafe_allow_html=True)
 
-        .project-card {
-            background: rgba(30, 41, 59, 0.4);
-            border: 1px solid rgba(59, 130, 246, 0.15);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            transition: all 0.3s ease-in-out;
-        }
+    # --- TABELA E EXPORTAÇÃO ---
+    st.subheader("📋 Query Telemetry Logs & Activity Stream")
+    
+    col_p, col_b = st.columns([3, 1])
+    with col_p:
+        pesquisa = st.text_input("🔍 Search Query Logs:", placeholder="Filtrar por termos, operador ou departamento...")
+    
+    if pesquisa:
+        mask = df_dados.astype(str).apply(lambda x: x.str.contains(pesquisa, case=False)).any(axis=1)
+        df_exibicao = df_dados[mask]
+    else:
+        df_exibicao = df_dados
 
-        .project-card:hover {
-            border-color: rgba(59, 130, 246, 0.6);
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 
-                        0 0 15px rgba(59, 130, 246, 0.12);
-            background: rgba(30, 41, 59, 0.6);
-        }
+    with col_b:
+        st.markdown("<br>", unsafe_allow_html=True)
+        csv = df_exibicao.to_csv(index=False, encoding="utf-8-sig")
+        st.download_button(
+            label="📥 Descarregar Excel/CSV",
+            data=csv,
+            file_name=f"telemetria_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+            mime="text/csv",
+            use_container_width=True
+        )
 
-        .project-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .project-desc {
-            font-size: 0.92rem;
-            color: #94a3b8;
-            line-height: 1.5;
-            margin-bottom: 15px;
-        }
-
-        .btn-link {
-            display: inline-block;
-            font-size: 0.88rem;
-            font-weight: 500;
-            color: #60a5fa;
-            text-decoration: none;
-            transition: color 0.2s ease;
-        }
-
-        .btn-link:hover {
-            color: #93c5fd;
-            text-decoration: underline;
-        }
-
-        /* Botão de Ação Principal */
-        .cta-container {
-            margin-top: 25px;
-        }
-
-        .btn-primary {
-            display: block;
-            width: 100%;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: #ffffff;
-            text-align: center;
-            padding: 14px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
-            transition: all 0.25s ease;
-        }
-
-        .btn-primary:hover {
-            background: linear-gradient(135deg, #1d4ed8, #1e40af);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
-        }
-    </style>
-</head>
-<body>
-
-    <!-- Canvas para o Efeito Matrix -->
-    <canvas id="matrix-canvas"></canvas>
-
-    <div class="container">
-        <header>
-            <h1>Douglas Honório</h1>
-            <div class="subtitle">Desenvolvedor Backend & Cibersegurança</div>
-            <p class="bio">Desenvolvendo aplicações seguras, automações inteligentes e painéis de monitoramento com Python, Streamlit e Supabase. Focado em proteção de dados e arquitetura de sistemas robustos.</p>
-        </header>
-
-        <div class="tech-stack">
-            <!-- Python -->
-            <span class="tech-tag">
-                <svg viewBox="0 0 24 24"><path d="M14.25 0h-4.5c-2.48 0-4.5 2.02-4.5 4.5v3h4.5V6h3v1.5h-6c-1.66 0-3 1.34-3 3v4.5c0 1.66 1.34 3 3-3h1.5v-3h3v4.5c0 1.66 1.34 3 3 3h4.5c2.48 0 4.5-2.02 4.5-4.5v-4.5c0-2.48-2.02-4.5-4.5-4.5zM9.75 3a.75.75 0 110 1.5.75.75 0 010-1.5zm4.5 18a.75.75 0 110-1.5.75.75 0 010 1.5z"/></svg>
-                Python
-            </span>
-            <!-- HTML5 & CSS3 -->
-            <span class="tech-tag">
-                <svg viewBox="0 0 24 24"><path d="M1.5 0h21l-1.91 21.569L12 24l-8.59-2.431L1.5 0zM17.2 6.5H7.7l.2 2.2h9.1l-.7 7.8-4.3 1.2-4.3-1.2-.3-3.3h2.2l.1 1.5 2.3.6 2.3-.6.3-3.6H7.1L6.5 4.5h11.1l-.4 2z"/></svg>
-                HTML5 & CSS3
-            </span>
-            <!-- MySQL -->
-            <span class="tech-tag">
-                <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 3.582 0 8s5.373 8 12 8 12-3.582 12-8-5.373-8-12-8zm0 14c-4.97 0-9-2.686-9-6s4.03-6 9-6 9 2.686 9 6-4.03 6-9 6zm0-10c-3.314 0-6 1.343-6 3s2.686 3 6 3 6-1.343 6-3-2.686-3-6-3z"/></svg>
-                MySQL
-            </span>
-            <!-- Supabase -->
-            <span class="tech-tag">
-                <svg viewBox="0 0 24 24"><path d="M21.362 9.143H12.38V1.714a1.143 1.143 0 00-1.93-.812L2.095 10.362a1.143 1.143 0 00.812 1.93h8.982v7.429a1.143 1.143 0 001.93.812l8.355-9.46a1.143 1.143 0 00-.812-1.93z"/></svg>
-                Supabase
-            </span>
-            <!-- Git & GitHub -->
-            <span class="tech-tag">
-                <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
-                Git & GitHub
-            </span>
-        </div>
-
-        <div class="section-title">Projetos em Destaque</div>
-
-        <div class="project-card">
-            <div class="project-title">📁 painel-ciber-supabase</div>
-            <div class="project-desc">Painel web interativo construído em Streamlit com integração ao banco de dados Supabase, focado no monitoramento, registro de logs e gestão de segurança contra ameaças.</div>
-            <a href="https://github.com/dhonorio73/painel-ciber-supabase" target="_blank" class="btn-link">Ver no GitHub &rarr;</a>
-        </div>
-
-        <div class="project-card">
-            <div class="project-title">📁 meu_primeiro_site</div>
-            <div class="project-desc">Portfólio pessoal desenvolvido com HTML5 e CSS3, estruturado com design moderno, responsivo e estética inspirada em segurança da informação.</div>
-            <a href="https://github.com/dhonorio73/meu_primeiro_site" target="_blank" class="btn-link">Ver no GitHub &rarr;</a>
-        </div>
-
-        <div class="cta-container">
-            <a href="https://github.com/dhonorio73" target="_blank" class="btn-primary">Acessar Perfil Completo no GitHub</a>
-        </div>
-    </div>
-
-    <!-- Script JavaScript para Animinar a Cascata Matrix -->
-    <script>
-        const canvas = document.getElementById('matrix-canvas');
-        const ctx = canvas.getContext('2d');
-
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        // Caracteres estilo binário e símbolos de código
-        const characters = '0101010101ABCDEFPYTHONSEC0101_#<>{}[]/\\';
-        const fontSize = 14;
-        let columns = Math.floor(canvas.width / fontSize);
-        let drops = [];
-
-        for (let i = 0; i < columns; i++) {
-            drops[i] = 1;
-        }
-
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(11, 15, 25, 0.08)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = '#3b82f6'; // Azul tech para combinar com a identidade
-            ctx.font = fontSize + 'px monospace';
-
-            for (let i = 0; i < drops.length; i++) {
-                const text = characters.charAt(Math.floor(Math.random() * characters.length));
-                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
-                drops[i]++;
-            }
-        }
-
-        setInterval(drawMatrix, 50);
-    </script>
-</body>
-</html>
+    st.dataframe(df_exibicao, use_container_width=True)
