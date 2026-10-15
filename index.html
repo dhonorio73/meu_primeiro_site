@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Douglas Honório | Desenvolvedor</title>
+    <style>
+        /* Reset de estilos básicos */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+            background-color: #0f172a; /* Fundo azul-escuro profissional (Slate) */
+            color: #f8fafc;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Container principal com efeito de profundidade */
+        .portfolio-card {
+            background-color: #1e293b;
+            width: 100%;
+            max-width: 450px;
+            padding: 40px 30px;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+            border: 1px solid #334155;
+        }
+
+        /* Nome do profissional */
+        .nome {
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        /* Cargo / Especialidade */
+        .cargo {
+            font-size: 16px;
+            color: #38bdf8; /* Azul cyan moderno */
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 20px;
+        }
+
+        /* Pequena biografia profissional baseada no seu perfil */
+        .bio {
+            font-size: 15px;
+            color: #94a3b8;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        /* Seção de Tags de Tecnologias/Habilidades */
+        .skills-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 30px;
+        }
+
+        .skill-tag {
+            background-color: #0f172a;
+            color: #cbd5e1;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid #334155;
+        }
+
+        /* Seção de Projetos Recentes */
+        .projects-section {
+            margin-top: 25px;
+            text-align: left;
+            border-top: 1px solid #334155;
+            padding-top: 25px;
+            margin-bottom: 30px;
+        }
+
+        .projects-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Card do Projeto Individual */
+        .project-card {
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 16px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: block;
+        }
+
+        .project-card:hover {
+            border-color: #38bdf8;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.1);
+        }
+
+        .project-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #38bdf8;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .project-desc {
+            font-size: 13px;
+            color: #94a3b8;
+            line-height: 1.5;
+        }
+
+        /* Botão profissional de Call to Action */
+        .btn-github {
+            display: inline-block;
+            width: 100%;
+            background-color: #2563eb; /* Azul corporativo */
+            color: #ffffff;
+            text-decoration: none;
+            text-align: center;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
+        }
+
+        /* Efeito ao passar o mouse no botão */
+        .btn-github:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="portfolio-card">
+        <!-- Seu Nome Profissional -->
+        <h1 class="nome">Douglas Honório</h1>
+        
+        <!-- Sua área de atuação -->
+        <div class="cargo">Desenvolvedor Python</div>
+        
+        <!-- Apresentação curta e objetiva igual ao seu GitHub -->
+        <p class="bio">
+            Desenvolvedor focado em Python, banco de dados MySQL e soluções de cibersegurança. Construindo automações e sistemas robustos.
+        </p>
+        
+        <!-- Seção de competências -->
+        <div class="skills-container">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">HTML5 & CSS3</span>
+            <span class="skill-tag">MySQL</span>
+            <span class="skill-tag">Supabase</span>
+            <span class="skill-tag">Git & GitHub</span>
+        </div>
+
+        <!-- Nova Seção de Projetos Vinculada ao Supabase -->
+        <div class="projects-section">
+            <h2 class="projects-title">Projetos em Destaque</h2>
+            
+            <a href="https://github.com" target="_blank" class="project-card">
+                <div class="project-name">📁 painel-ciber-supabase</div>
+                <div class="project-desc">
+                    Painel web interativo desenvolvido em Streamlit integrado ao banco de dados Supabase para gestão, registro e monitoramento de segurança contra ameaças.
+                </div>
+            </a>
+        </div>
+        
+        <!-- Link para seu perfil completo no GitHub -->
+        <a href="https://github.com" target="_blank" class="btn-github">Acessar Perfil Completo</a>
+    </div>
+
+</body>
+</html>
