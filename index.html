@@ -20,20 +20,32 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
-            /* Mantendo a sua essência visual tech de fundo */
-            background-image: linear-gradient(rgba(11, 15, 25, 0.85), rgba(11, 15, 25, 0.85)), 
-                              repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(59, 130, 246, 0.03) 40px, rgba(59, 130, 246, 0.03) 41px);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Efeito Matrix / Código em Cascata no Fundo */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.18;
+            pointer-events: none;
         }
 
         .container {
             width: 100%;
             max-width: 650px;
-            background: rgba(17, 24, 39, 0.75);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(59, 130, 246, 0.2);
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(59, 130, 246, 0.25);
             border-radius: 16px;
             padding: 35px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+            z-index: 1;
         }
 
         header {
@@ -65,16 +77,19 @@
             margin-bottom: 25px;
         }
 
-        /* Tags de Tecnologias */
+        /* Tags de Tecnologias com Ícones */
         .tech-stack {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 8px;
+            gap: 10px;
             margin-bottom: 35px;
         }
 
         .tech-tag {
+            display: flex;
+            align-items: center;
+            gap: 6px;
             background: rgba(30, 41, 59, 0.9);
             border: 1px solid rgba(148, 163, 184, 0.15);
             color: #cbd5e1;
@@ -83,6 +98,12 @@
             font-size: 0.85rem;
             font-weight: 500;
             transition: all 0.25s ease;
+        }
+
+        .tech-tag svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
         }
 
         .tech-tag:hover {
@@ -179,6 +200,9 @@
 </head>
 <body>
 
+    <!-- Canvas para o Efeito Matrix -->
+    <canvas id="matrix-canvas"></canvas>
+
     <div class="container">
         <header>
             <h1>Douglas Honório</h1>
@@ -187,11 +211,31 @@
         </header>
 
         <div class="tech-stack">
-            <span class="tech-tag">Python</span>
-            <span class="tech-tag">HTML5 & CSS3</span>
-            <span class="tech-tag">MySQL</span>
-            <span class="tech-tag">Supabase</span>
-            <span class="tech-tag">Git & GitHub</span>
+            <!-- Python -->
+            <span class="tech-tag">
+                <svg viewBox="0 0 24 24"><path d="M14.25 0h-4.5c-2.48 0-4.5 2.02-4.5 4.5v3h4.5V6h3v1.5h-6c-1.66 0-3 1.34-3 3v4.5c0 1.66 1.34 3 3-3h1.5v-3h3v4.5c0 1.66 1.34 3 3 3h4.5c2.48 0 4.5-2.02 4.5-4.5v-4.5c0-2.48-2.02-4.5-4.5-4.5zM9.75 3a.75.75 0 110 1.5.75.75 0 010-1.5zm4.5 18a.75.75 0 110-1.5.75.75 0 010 1.5z"/></svg>
+                Python
+            </span>
+            <!-- HTML5 & CSS3 -->
+            <span class="tech-tag">
+                <svg viewBox="0 0 24 24"><path d="M1.5 0h21l-1.91 21.569L12 24l-8.59-2.431L1.5 0zM17.2 6.5H7.7l.2 2.2h9.1l-.7 7.8-4.3 1.2-4.3-1.2-.3-3.3h2.2l.1 1.5 2.3.6 2.3-.6.3-3.6H7.1L6.5 4.5h11.1l-.4 2z"/></svg>
+                HTML5 & CSS3
+            </span>
+            <!-- MySQL -->
+            <span class="tech-tag">
+                <svg viewBox="0 0 24 24"><path d="M12 0C5.373 0 0 3.582 0 8s5.373 8 12 8 12-3.582 12-8-5.373-8-12-8zm0 14c-4.97 0-9-2.686-9-6s4.03-6 9-6 9 2.686 9 6-4.03 6-9 6zm0-10c-3.314 0-6 1.343-6 3s2.686 3 6 3 6-1.343 6-3-2.686-3-6-3z"/></svg>
+                MySQL
+            </span>
+            <!-- Supabase -->
+            <span class="tech-tag">
+                <svg viewBox="0 0 24 24"><path d="M21.362 9.143H12.38V1.714a1.143 1.143 0 00-1.93-.812L2.095 10.362a1.143 1.143 0 00.812 1.93h8.982v7.429a1.143 1.143 0 001.93.812l8.355-9.46a1.143 1.143 0 00-.812-1.93z"/></svg>
+                Supabase
+            </span>
+            <!-- Git & GitHub -->
+            <span class="tech-tag">
+                <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+                Git & GitHub
+            </span>
         </div>
 
         <div class="section-title">Projetos em Destaque</div>
@@ -213,5 +257,47 @@
         </div>
     </div>
 
+    <!-- Script JavaScript para Animinar a Cascata Matrix -->
+    <script>
+        const canvas = document.getElementById('matrix-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Caracteres estilo binário e símbolos de código
+        const characters = '0101010101ABCDEFPYTHONSEC0101_#<>{}[]/\\';
+        const fontSize = 14;
+        let columns = Math.floor(canvas.width / fontSize);
+        let drops = [];
+
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(11, 15, 25, 0.08)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#3b82f6'; // Azul tech para combinar com a identidade
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+
+        setInterval(drawMatrix, 50);
+    </script>
 </body>
 </html>
